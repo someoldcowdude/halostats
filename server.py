@@ -2,6 +2,15 @@ from flask import Flask, jsonify, redirect, request, render_template, url_for
 import sys,http.client, urllib.request,urllib.parse,urllib.error, base64, json
 
 app = Flask(__name__) 
+kill_data = {
+	"gunkills":666,
+	"meleekills":3,
+	"assassinations":23,
+	"groundpounds":1666,
+	"shoulderbash":6663,
+	"headshots":66623,
+	"total":66631231
+}
  
 
 @app.route("/") 
@@ -31,7 +40,7 @@ def hello():
     headshots = countkills(data, "IsHeadshot")
     total = countkills(data)
     
-    return render_template('index.html', gunkills = gunkills, meleekills = meleekills , assassinations = assassinations, groundpounds = groundpounds, shoulderbash = shoulderbash, headshots = headshots, total = total )
+    return render_template('index.html', data = kill_data)
 
 def countkills(data, type = None):
     count = 0
