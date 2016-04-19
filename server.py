@@ -2,12 +2,10 @@ from flask import Flask, jsonify, redirect, request, render_template, url_for
 import sys,http.client, urllib.request,urllib.parse,urllib.error, base64, json
 
 app = Flask(__name__) 
-kill_data = {
+kill_data = {      
 }
  
-
-@app.route("/") 
-def index():
+def count_kills():
     headers = {
         # Request headers
         'Ocp-Apim-Subscription-Key': '03b04056ea114947beaa40503aba4a55',
@@ -33,6 +31,9 @@ def index():
     kill_data["headshots"] = countkills(data, "IsHeadshot")
     kill_data["total"] = countkills(data)
     
+@app.route("/") 
+def index():
+    count_kills()
     return render_template('index.html', data = kill_data)
 
 def countkills(data, type = None):
