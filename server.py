@@ -7,7 +7,7 @@ kill_data = {
  
 
 @app.route("/") 
-def hello():
+def index():
     headers = {
         # Request headers
         'Ocp-Apim-Subscription-Key': '03b04056ea114947beaa40503aba4a55',
