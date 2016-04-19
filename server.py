@@ -3,13 +3,6 @@ import sys,http.client, urllib.request,urllib.parse,urllib.error, base64, json
 
 app = Flask(__name__) 
 kill_data = {
-	"gunkills":666,
-	"meleekills":3,
-	"assassinations":23,
-	"groundpounds":1666,
-	"shoulderbash":6663,
-	"headshots":66623,
-	"total":66631231
 }
  
 
@@ -32,13 +25,13 @@ def hello():
     except Exception as e:
         sys.stderr.write("ERROR: %sn" % str(e))
     
-    gunkills = countkills(data, "IsWeapon")
-    meleekills = countkills(data, "IsMelee")
-    assassinations = countkills(data, "IsAssassination")
-    groundpounds = countkills(data, "IsGroundPound")
-    shoulderbash = countkills(data, "IsShoulderBash")
-    headshots = countkills(data, "IsHeadshot")
-    total = countkills(data)
+    kill_data["gunkills"] = countkills(data, "IsWeapon")
+    kill_data["meleekills"] = countkills(data, "IsMelee")
+    kill_data["assassinations"] = countkills(data, "IsAssassination")
+    kill_data["groundpounds"] = countkills(data, "IsGroundPound")
+    kill_data["shoulderbash"] = countkills(data, "IsShoulderBash")
+    kill_data["headshots"] = countkills(data, "IsHeadshot")
+    kill_data["total"] = countkills(data)
     
     return render_template('index.html', data = kill_data)
 
