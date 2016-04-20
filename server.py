@@ -16,7 +16,9 @@ def count_kills():
 
     try:
         conn = http.client.HTTPSConnection('www.haloapi.com')
-        conn.request("GET", "/stats/h5/matches/23c056aa-c05e-4ae7-99ae-d4a282e4530a/events?%s" % params, "{body}", headers)
+        match_id = "23c056aa-c05e-4ae7-99ae-d4a282e4530a"
+        path = "/stats/h5/matches/" + match_id + "/events?" + params 
+        conn.request("GET", path, "{body}", headers)
         response = conn.getresponse()
         rawdata = response.read()
         data = json.loads(rawdata.decode("utf-8"))
