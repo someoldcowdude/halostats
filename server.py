@@ -4,7 +4,10 @@ import sys,http.client, urllib.request,urllib.parse,urllib.error, base64, json
 app = Flask(__name__) 
 kill_data = {      
 }
- 
+
+def get_latest_match_id():
+    return "23c056aa-c05e-4ae7-99ae-d4a282e4530a"
+
 def count_kills():
     headers = {
         # Request headers
@@ -16,7 +19,7 @@ def count_kills():
 
     try:
         conn = http.client.HTTPSConnection('www.haloapi.com')
-        match_id = "23c056aa-c05e-4ae7-99ae-d4a282e4530a"
+        match_id = get_latest_match_id()
         path = "/stats/h5/matches/" + match_id + "/events?" + params 
         conn.request("GET", path, "{body}", headers)
         response = conn.getresponse()
@@ -24,7 +27,7 @@ def count_kills():
         data = json.loads(rawdata.decode("utf-8"))
     except Exception as e:
         sys.stderr.write("ERROR: %sn" % str(e))
-    
+        
     kill_data["gunkills"] = countkills(data, "IsWeapon")
     kill_data["meleekills"] = countkills(data, "IsMelee")
     kill_data["assassinations"] = countkills(data, "IsAssassination")
