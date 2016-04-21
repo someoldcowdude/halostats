@@ -41,13 +41,24 @@ def index():
     count_kills()
     return render_template('index.html', data = kill_data)
 
+@app.route("/match/summary") 
+def match_summary():
+    count_kills()
+    return render_template('match/summary.html', data = kill_data)
+
+
 def countkills(data, type = None):
     count = 0
     if type:
         for kill in data["GameEvents"]:
-            if kill[type]:
-                count = count + 1
+            try:
+                if kill[type]:
+                    count = count + 1
+            except Exception as e:
+                sys.stderr.write("ERROR: %sn" % str(e))
+                
     else:
+        # FIXME: incorrect count see issue #1
         count = len(data["GameEvents"])
     return count
 
