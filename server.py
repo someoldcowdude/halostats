@@ -38,13 +38,16 @@ def count_kills():
     
 @app.route("/") 
 def index():
-    count_kills()
-    return render_template('index.html', data = kill_data)
+    return render_template('index.html')
 
 @app.route("/match/summary") 
 def match_summary():
     count_kills()
     return render_template('match/summary.html', data = kill_data)
+ 
+@app.route("/player/summary") 
+def player_summary():
+    return render_template('player/summary.html')
 
 
 def countkills(data, type = None):
