@@ -2,8 +2,6 @@ from flask import Flask, jsonify, redirect, request, render_template, url_for
 import sys,http.client, urllib.request,urllib.parse,urllib.error, base64, json
 
 app = Flask(__name__) 
-kill_data = {      
-}
 
 def get_latest_match_id():
     return "23c056aa-c05e-4ae7-99ae-d4a282e4530a"
@@ -26,6 +24,9 @@ def call_api(path):
 
 
 def count_all_kills():
+    kill_data = {      
+    }
+
     params = urllib.parse.urlencode({
     })
 
@@ -41,19 +42,28 @@ def count_all_kills():
     kill_data["shoulderbash"] = count_kills(data, "IsShoulderBash")
     kill_data["headshots"] = count_kills(data, "IsHeadshot")
     kill_data["total"] = count_kills(data)
-    
+    return kill_data
+
+def get_player_summary():
+    params = urllib.parse.urlencode({
+    })
+    gamertag = "someoldcowdude"
+    path = "/stats/h5/servicerecords/arena?players=" + gamertag
+    return call_api(path)
+
 @app.route("/") 
 def index():
     return render_template('index.html')
 
 @app.route("/match/summary") 
 def match_summary():
-    count_all_kills()
+    kill_data = count_all_kills()
     return render_template('match/summary.html', data = kill_data)
  
-@app.route("/player/summary") 
+@app.route("/player/summary")
 def player_summary():
-    return render_template('player/summary.html')
+    data = get_player_summary()
+    return render_template('player/summary.html', data = data)
 
 
 def count_kills(data, type = None):
