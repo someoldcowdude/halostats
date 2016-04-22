@@ -8,26 +8,32 @@ kill_data = {
 def get_latest_match_id():
     return "23c056aa-c05e-4ae7-99ae-d4a282e4530a"
 
-def count_all_kills():
+def call_api(path):
     headers = {
         # Request headers
         'Ocp-Apim-Subscription-Key': '03b04056ea114947beaa40503aba4a55',
     }
 
-    params = urllib.parse.urlencode({
-    })
 
     try:
         conn = http.client.HTTPSConnection('www.haloapi.com')
-        match_id = get_latest_match_id()
-        path = "/stats/h5/matches/" + match_id + "/events?" + params 
         conn.request("GET", path, "{body}", headers)
         response = conn.getresponse()
         rawdata = response.read()
-        data = json.loads(rawdata.decode("utf-8"))
+        return json.loads(rawdata.decode("utf-8"))
     except Exception as e:
         sys.stderr.write("ERROR: %sn" % str(e))
-        
+
+
+def count_all_kills():
+    params = urllib.parse.urlencode({
+    })
+
+    match_id = get_latest_match_id()
+    path = "/stats/h5/matches/" + match_id + "/events?" + params 
+    
+    data = call_api(path)
+    
     kill_data["gunkills"] = count_kills(data, "IsWeapon")
     kill_data["meleekills"] = count_kills(data, "IsMelee")
     kill_data["assassinations"] = count_kills(data, "IsAssassination")
