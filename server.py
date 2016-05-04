@@ -63,7 +63,7 @@ def match_summary():
 @app.route("/player/summary")
 def player_summary():
     data = get_player_summary()
-    return render_template('player/summary.html', data = data)
+    return render_template('player/summary.html', data = data["Results"][0])
 
 
 def count_kills(data, type = None):
