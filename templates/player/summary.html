@@ -1,7 +1,40 @@
 <!doctype html> 
-<title>Test</title> 
+<head>
+  <title>PlayerStatsDuuuude</title>
+  <style>
+    .stats_box {
+    border-style: solid;
+    border-width: 1.2px;
+    width: 10%;
+    position: relative;
+    left: 50%;
+    }
+    .magnum {
+    border-style: solid;
+    border-width: 1.2px;
+    width: 20%;
+    float: left;
+    }
+  </style>
+</head>
+
 <div>
   <a href="/">Home</a>
 </div>
 
 <h1>Player Summary for {{ data.Id }}</h1>
+
+<div>
+
+<div class="magnum">
+  <p>magnum</p>
+  <p> </p>
+  <p> 99.9999999999999 </p>
+</div>
+
+<div class="stats_box">
+  <p>Total headshots {{ data.Result.ArenaStats.TotalHeadshots }} </p>
+</div>
+
+</div>
+
