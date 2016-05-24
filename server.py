@@ -1,27 +1,13 @@
 from flask import Flask, jsonify, redirect, request, render_template, url_for
+from halopy import HaloPy
 import sys,http.client, urllib.request,urllib.parse,urllib.error, base64, json
 
+HALO_API_KEY = "03b04056ea114947beaa40503aba4a55"
 app = Flask(__name__) 
+halo = HaloPy(HALO_API_KEY, cache_backend='memory')
 
 def get_latest_match_id():
     return "23c056aa-c05e-4ae7-99ae-d4a282e4530a"
-
-def call_api(path):
-    headers = {
-        # Request headers
-        'Ocp-Apim-Subscription-Key': '03b04056ea114947beaa40503aba4a55',
-    }
-
-
-    try:
-        conn = http.client.HTTPSConnection('www.haloapi.com')
-        conn.request("GET", path, "{body}", headers)
-        response = conn.getresponse()
-        rawdata = response.read()
-        return json.loads(rawdata.decode("utf-8"))
-    except Exception as e:
-        sys.stderr.write("ERROR: %sn" % str(e))
-
 
 def count_all_kills():
     kill_data = {      
@@ -45,10 +31,14 @@ def count_all_kills():
     return kill_data
 
 def get_player_summary():
-    params = urllib.parse.urlencode({
-    })
     gamertag = "someoldcowdude"
-    path = "/stats/h5/servicerecords/arena?players=" + gamertag
+    result = halo.get_player_service_record(gamertag, game_mode='arena')
+    return result
+
+def get_weapons_meta_data():
+    params = urllib.parse.urlencode({
+        })
+    path = "/metadata/h5/metadata/weapons?%s" % params 
     return call_api(path)
 
 @app.route("/") 
@@ -62,8 +52,12 @@ def match_summary():
  
 @app.route("/player/summary")
 def player_summary():
-    data = get_player_summary()
-    return render_template('player/summary.html', data = data["Results"][0])
+    alldata = get_player_summary()
+    weaponstats = alldata.Result["ArenaStats"]["WeaponStats"]
+    weapons = halo.get_weapons()
+
+    return render_template('player/summary.html', data = alldata, weaponstats = weaponstats, weapons = weapons)
+
 
 
 def count_kills(data, type = None):
